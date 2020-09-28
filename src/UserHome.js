@@ -60,8 +60,7 @@ function GameList(props){
             columns: element.metadata.columns,
             bombs: element.metadata.bombs,
             status: element.status,
-            creationTime: element.creationTime,
-            lastUpdate: element.lastUpdate,
+            timePlayed: Number(element.timePlayed/60).toFixed(2),
             action: <Link to={{pathname: link, state: {gameId: element.id}}}>Load</Link>
         }); 
     });
