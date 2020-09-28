@@ -62,7 +62,7 @@ function GameList(props){
             status: element.status,
             creationTime: element.creationTime,
             lastUpdate: element.lastUpdate,
-            action: <Link to={{pathname: link, state: {gameInfo: element}}}>Load</Link>
+            action: <Link to={{pathname: link, state: {gameId: element.id}}}>Load</Link>
         }); 
     });
 

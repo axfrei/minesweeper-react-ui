@@ -8,6 +8,16 @@ class Game extends React.Component {
         this.state = props.location.state;
         this.handleChange = this.handleChange.bind(this);
         this.boardRef =  React.createRef();
+        console.log(this.state);
+    }
+
+    componentDidMount(){
+        fetch(`http://prod.eba-wf3wzrap.us-east-1.elasticbeanstalk.com/game/load/${this.state.gameId}`)
+        .then(res => res.json())
+        .then((data) => {
+          this.setState({gameId: this.state.gameId, gameInfo: data});
+        })
+        .catch(console.log)
     }
 
     handleChange(newValue) {
@@ -15,15 +25,16 @@ class Game extends React.Component {
     }
 
     render() {
+
         return (
             <div>
-                <div>Last Update {this.state.gameInfo.lastUpdate}</div>
-                <BoardV2 gameInfo={this.state.gameInfo} onChange={this.handleChange} ref={this.boardRef}/>
+                {this.state.gameInfo &&
+                    <BoardV2 gameInfo={this.state.gameInfo} onChange={this.handleChange} ref={this.boardRef}/>
+                }
             </div>
         )
     }
 }
-
 
 export default Game;
 
