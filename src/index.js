@@ -1,12 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import BeginForm from './App';
 import * as serviceWorker from './serviceWorker';
+import UserHome from './UserHome'
+import { BrowserRouter, Route, Link } from 'react-router-dom'
+import Game from './Game'
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+          <Route exact={true} path="/" component={BeginForm}/>
+          <Route exact={true} path="/minesweeper" component={UserHome} />
+          <Route path="/minesweeper/game/:gameId" component={Game} />
+      </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );
