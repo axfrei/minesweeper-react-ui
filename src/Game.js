@@ -27,7 +27,7 @@ class Game extends React.Component {
     render() {
 
         return (
-            <div>
+            <div className="App">
                 {this.state.gameInfo &&
                     <BoardV2 gameInfo={this.state.gameInfo} onChange={this.handleChange} ref={this.boardRef}/>
                 }

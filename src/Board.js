@@ -42,17 +42,4 @@ class BoardV2 extends React.Component {
         )
     }
 }
-
-function Cells(props) {
-    const gameInfo = props.gameInfo;
-    const index = props.index;
-    const cells = gameInfo.cells.filter(cell => cell.x === index);
-    return (
-       cells.map((cell, index) => {
-            return <CellV2 key={index} cell={cell} gameInfo={gameInfo} onChange={props.onChange} />
-        })
-
-    )
-};
-
 export default BoardV2;
