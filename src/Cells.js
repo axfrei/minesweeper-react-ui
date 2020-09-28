@@ -25,7 +25,7 @@ class Cellsv2 extends React.Component {
          this.cellRefs.forEach((cellRef,i) => {
             const cell = cellsToUpdate[i];
             const index = (cell.x*this.state.gameInfo.metadata.rows)+cell.y;
-            if(cell.recognized && cell.value === 0){
+            if(cell.recognized){
                 cellRef.current.changeCellInfo(this.state.gameInfo.cells[index]); 
             }
         });

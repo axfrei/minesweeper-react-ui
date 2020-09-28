@@ -7,8 +7,7 @@ class Cellv2 extends React.Component {
         super(props);
         this.state = { cell: props.cell, gameInfo: props.gameInfo, index: (props.cell.x*props.gameInfo.metadata.rows)+props.cell.y }
         this.handleChange = this.handleChange.bind(this);
-        //this.recognize = this.recognize.bind(this);
-        //this.flag = this.flag.bind(this);
+        this.clickTimeout = null
     }
 
 
@@ -33,12 +32,29 @@ class Cellv2 extends React.Component {
             return <div className="rTableCell"><PrettyCell label={cell.value} className="recognized"/></div>
         }
 
-        if (cell.flag) {
-           return  <div className="rTableCell"><PrettyCell symbol="🏁"onClick={() => this.recognize(cell, gameInfo)} onDoubleClick={() => this.flag(cell, gameInfo)}/></div>
+        if (cell.flagged) {
+           return  <div className="rTableCell"><PrettyCell symbol="🏁" className="flagged" onClick={()=> this.handleClicks(cell, gameInfo)}/></div>
         }
 
-        return <div className="rTableCell"><PrettyCell label="&nbsp;" onClick={() => this.recognize(cell, gameInfo)} onDoubleClick={() => this.flag(cell, gameInfo)}/></div>
+        return <div className="rTableCell"><PrettyCell label="&nbsp;" onClick={()=> this.handleClicks(cell, gameInfo)}/></div>
     }
+
+    handleClicks(cell, gameInfo) {
+        if (this.clickTimeout !== null) {
+          console.log('double click executes')
+          this.flag(cell, gameInfo);
+          clearTimeout(this.clickTimeout)
+          this.clickTimeout = null
+        } else {
+          console.log('single click')  
+          this.clickTimeout = setTimeout(()=>{
+          console.log('first click executes ')
+          this.recognize(cell, gameInfo);
+          clearTimeout(this.clickTimeout)
+            this.clickTimeout = null
+          }, 1000)
+        }
+      }
 
     recognize(cell, gameInfo) {
         fetch(`http://prod.eba-wf3wzrap.us-east-1.elasticbeanstalk.com/game/recognize`, {
@@ -92,7 +108,7 @@ function PrettyCell(props){
                 className={props.className + ' prettyCell _'+props.label}
                 role="img"
                 aria-label={props.label ? props.label : ""}
-                onClick={props.onClick} onDoubleClick={props.onDoubleClick}
+                onClick={props.onClick}
             >
                 {props.symbol? props.symbol:props.label}
             </span>
