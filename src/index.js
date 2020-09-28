@@ -8,13 +8,13 @@ import { BrowserRouter, Route, Link } from 'react-router-dom'
 import Game from './Game'
 
 ReactDOM.render(
-  <React.StrictMode>
+  <React.Fragment>
     <BrowserRouter>
           <Route exact={true} path="/" component={BeginForm}/>
           <Route exact={true} path="/minesweeper" component={UserHome} />
           <Route path="/minesweeper/game/:gameId" component={Game} />
       </BrowserRouter>
-  </React.StrictMode>,
+  </React.Fragment>,
   document.getElementById('root')
 );
 

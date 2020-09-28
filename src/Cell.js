@@ -6,10 +6,22 @@ class Cellv2 extends React.Component {
     constructor(props) {
         super(props);
         this.state = { cell: props.cell, gameInfo: props.gameInfo, index: (props.cell.x*props.gameInfo.metadata.rows)+props.cell.y }
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    handleChange(newValue) {
+        // Here, we invoke the callback with the new value
+        this.props.onChange(newValue);
+    }
+
+    changeCellInfo(newValue){
+        this.setState({ cell: newValue, gameInfo: this.state.gameInfo, index: this.state.index});
     }
 
     render() {
+        console.log("render cell")
         const cell = this.state.cell;
+        console.log(cell)
         const gameInfo = this.state.gameInfo;
         if (cell.recognized) {
             if(cell.bomb){
@@ -41,7 +53,11 @@ class Cellv2 extends React.Component {
         })
         .then(res => res.json())
         .then((data) => {
-            this.setState({ cell: data.cells[this.state.index], gameInfo: data, index: this.state});
+            if(this.state.cell.value === 0){
+                this.handleChange(data);
+            }else{
+                this.setState({ cell: data.cells[this.state.index], gameInfo: data, index: this.state.index});
+            }
         })
         .catch(console.log)
     }
@@ -61,7 +77,7 @@ class Cellv2 extends React.Component {
         })
         .then(res => res.json())
         .then((data) => {
-            this.setState({ cell: data.cells[this.state.index], gameInfo: data, index: this.state});
+            this.setState({ cell: data.cells[this.state.index], gameInfo: data, index: this.state.index});
         })
         .catch(console.log)
     }
