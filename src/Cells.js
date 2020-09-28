@@ -2,14 +2,12 @@ import React from 'react';
 import './Cell.css'
 
 import CellV2 from './Cell'
-import { Redirect } from 'react-router-dom';
 
 class Cellsv2 extends React.Component {
     constructor(props) {
         super(props);
-        this.cells = props.gameInfo.cells.filter(cell => cell.x === props.index);
-        this.state = { gameInfo: props.gameInfo, index: props.index, cells: this.cells}
-        this.cellRefs = this.cells.map(() => {
+        this.state = { gameInfo: props.gameInfo, index: props.index, cells: props.gameInfo.cells.filter(cell => cell.x === props.index)}
+        this.cellRefs = this.state.cells.map(() => {
             return React.createRef();
         });
 
@@ -19,12 +17,18 @@ class Cellsv2 extends React.Component {
     handleChange(newValue) {
         console.log("setting new state on CellsV2")
         this.state = {gameInfo: newValue, index: this.state.index, cells: newValue.cells.filter(cell => cell.x ===  this.state.index)};
-        this.cellRefs.forEach((cellRef,i) => {
-            const cell = this.cells[i];
+        this.props.onChange(newValue);
+    }
+
+    changeCellsInfo(newGameInfo, index){
+        console.log('changeCellsInfo');
+        this.state = {gameInfo: newGameInfo, index: this.state.index, cells: newGameInfo.cells.filter(cell => cell.x ===  this.state.index)};
+        const cellsToUpdate = newGameInfo.cells.filter(cell => cell.x === index);
+         this.cellRefs.forEach((cellRef,i) => {
+            const cell = cellsToUpdate[i];
             const index = (cell.x*this.state.gameInfo.metadata.rows)+cell.y
             cellRef.current.changeCellInfo(this.state.gameInfo.cells[index]); 
         });
-        this.props.onChange(newValue);
     }
 
     render() {

@@ -8,13 +8,22 @@ class BoardV2 extends React.Component {
         super(props);
         this.state = { gameInfo: props.gameInfo };
         this.handleChange = this.handleChange.bind(this);
-        console.log('const');
+
+        this.cellsRefs = [];
+        var i;
+        for (i = 0; i < this.state.gameInfo.metadata.rows; i++) {
+            this.cellsRefs.push(React.createRef());
+        };
+        
     }
 
     handleChange(newValue) {
         this.setState({ gameInfo: newValue});
         console.log('state setted');
-        this.props.onChange(newValue);
+        this.cellsRefs.forEach((cellRefs,i) => {
+            cellRefs.current.changeCellsInfo(this.state.gameInfo, i); 
+        });
+        //this.props.onChange(newValue);
     }
 
     render() {
@@ -23,8 +32,7 @@ class BoardV2 extends React.Component {
         const rows = [];
         var i;
         for (i = 0; i < this.state.gameInfo.metadata.rows; i++) {
-            
-            rows.push(<div key={i} className="rTableRow"><CellsV2 index={i} gameInfo={this.state.gameInfo} onChange={this.handleChange}/></div>)
+            rows.push(<div key={i} className="rTableRow"><CellsV2 index={i} gameInfo={this.state.gameInfo} onChange={this.handleChange}  ref={this.cellsRefs[i]}/></div>)
         }
 
         return (
