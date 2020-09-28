@@ -3,6 +3,55 @@
 .rTableHeading { display: table-header-group; }
 .rTableBody { display: table-row-group; }
 .rTableFoot { display: table-footer-group; }
-.rTableCell, .rTableHead { display: table-cell; }
+.rTableCell, .rTableHead { display: table-cell; display: table-cell;
+    max-width: 2px;
+    border: 1px solid;
+    text-align: center;
+    background: lightgray; }
 
 .toDiscover { background-color: grey;}
+
+.prettyCell {
+    display: block;
+}
+
+
+._1 {
+    color: blue;
+}
+
+._2 {
+    color: green;
+}
+
+._3 {
+    color: red;
+}
+
+._4 {
+    color: darkblue;
+}
+
+._5 {
+    color: darkgreen;
+}
+
+._6 {
+    color: darkred;
+}
+
+._7 {
+    color: goldenrod;
+}
+
+._8 {
+    color: darkgoldenrod;
+}
+
+._0 {
+    color: gray;
+}
+
+.recognized {
+    background-color: gray;
+}

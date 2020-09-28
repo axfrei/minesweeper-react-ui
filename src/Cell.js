@@ -1,16 +1,18 @@
 import React from 'react';
 import './Cell.css'
-import { Redirect } from 'react-router-dom';
 
 class Cellv2 extends React.Component {
+
     constructor(props) {
         super(props);
         this.state = { cell: props.cell, gameInfo: props.gameInfo, index: (props.cell.x*props.gameInfo.metadata.rows)+props.cell.y }
         this.handleChange = this.handleChange.bind(this);
+        //this.recognize = this.recognize.bind(this);
+        //this.flag = this.flag.bind(this);
     }
 
+
     handleChange(newValue) {
-        // Here, we invoke the callback with the new value
         this.props.onChange(newValue);
     }
 
@@ -25,17 +27,17 @@ class Cellv2 extends React.Component {
         const gameInfo = this.state.gameInfo;
         if (cell.recognized) {
             if(cell.bomb){
-                return <div className="rTableCell">B</div>
+                return <div className="rTableCell"><PrettyCell symbol="💣" className="recognized"/></div>
             }
 
-            return <div className="rTableCell">{cell.value}</div>
+            return <div className="rTableCell"><PrettyCell label={cell.value} className="recognized"/></div>
         }
 
         if (cell.flag) {
-            return <div className="rTableCell" onClick={() => this.recognize(cell, gameInfo)} onDoubleClick={() => this.flag(cell, gameInfo)}>F</div>
+           return  <div className="rTableCell"><PrettyCell symbol="🏁"onClick={() => this.recognize(cell, gameInfo)} onDoubleClick={() => this.flag(cell, gameInfo)}/></div>
         }
 
-        return <div className="rTableCell toDiscover" onClick={() => this.recognize(cell, gameInfo)} onDoubleClick={() => this.flag(cell, gameInfo)}>?</div>
+        return <div className="rTableCell"><PrettyCell label="&nbsp;" onClick={() => this.recognize(cell, gameInfo)} onDoubleClick={() => this.flag(cell, gameInfo)}/></div>
     }
 
     recognize(cell, gameInfo) {
@@ -83,5 +85,18 @@ class Cellv2 extends React.Component {
     }
 }
 
+function PrettyCell(props){
+
+    return (
+            <span
+                className={props.className + ' prettyCell _'+props.label}
+                role="img"
+                aria-label={props.label ? props.label : ""}
+                onClick={props.onClick} onDoubleClick={props.onDoubleClick}
+            >
+                {props.symbol? props.symbol:props.label}
+            </span>
+    );
+}
 
 export default Cellv2;

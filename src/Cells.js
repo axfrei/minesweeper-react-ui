@@ -15,19 +15,19 @@ class Cellsv2 extends React.Component {
     }
 
     handleChange(newValue) {
-        console.log("setting new state on CellsV2")
-        this.state = {gameInfo: newValue, index: this.state.index, cells: newValue.cells.filter(cell => cell.x ===  this.state.index)};
         this.props.onChange(newValue);
     }
 
-    changeCellsInfo(newGameInfo, index){
+    spreadNonValueRecognizedUpdate(newGameInfo, index){
         console.log('changeCellsInfo');
         this.state = {gameInfo: newGameInfo, index: this.state.index, cells: newGameInfo.cells.filter(cell => cell.x ===  this.state.index)};
         const cellsToUpdate = newGameInfo.cells.filter(cell => cell.x === index);
          this.cellRefs.forEach((cellRef,i) => {
             const cell = cellsToUpdate[i];
-            const index = (cell.x*this.state.gameInfo.metadata.rows)+cell.y
-            cellRef.current.changeCellInfo(this.state.gameInfo.cells[index]); 
+            const index = (cell.x*this.state.gameInfo.metadata.rows)+cell.y;
+            if(cell.recognized && cell.value === 0){
+                cellRef.current.changeCellInfo(this.state.gameInfo.cells[index]); 
+            }
         });
     }
 

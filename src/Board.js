@@ -21,9 +21,9 @@ class BoardV2 extends React.Component {
         this.setState({ gameInfo: newValue});
         console.log('state setted');
         this.cellsRefs.forEach((cellRefs,i) => {
-            cellRefs.current.changeCellsInfo(this.state.gameInfo, i); 
+            cellRefs.current.spreadNonValueRecognizedUpdate(this.state.gameInfo, i); 
         });
-        //this.props.onChange(newValue);
+        this.props.onChange(newValue);
     }
 
     render() {

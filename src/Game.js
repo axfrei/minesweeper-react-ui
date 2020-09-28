@@ -7,18 +7,18 @@ class Game extends React.Component {
         super(props);
         this.state = props.location.state;
         this.handleChange = this.handleChange.bind(this);
+        this.boardRef =  React.createRef();
     }
 
     handleChange(newValue) {
         this.setState({ gameInfo: newValue });
-        console.log('state setted');
     }
 
     render() {
         return (
             <div>
                 <div>Last Update {this.state.gameInfo.lastUpdate}</div>
-                <BoardV2 gameInfo={this.state.gameInfo} onChange={this.handleChange} />
+                <BoardV2 gameInfo={this.state.gameInfo} onChange={this.handleChange} ref={this.boardRef}/>
             </div>
         )
     }
