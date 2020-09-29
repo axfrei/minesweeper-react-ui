@@ -13,6 +13,9 @@
 
 .prettyCell {
     display: block;
+    cursor: pointer;
+    text-shadow:gray;
+    font-weight: bold;
 }
 
 
@@ -58,4 +61,18 @@
 
 .flagged {
     background-color: gray;
+}
+
+.looser {
+    text-shadow: 1px 1px 1px #BCC4C4;
+    color: #D30707;
+    font-weight: bold;
+    font-size: xxx-large;
+}
+
+.winner {
+    text-shadow: 1px 1px 1px #BCC4C4;
+    color: green;
+    font-weight: bold;
+    font-size: xxx-large;
 }

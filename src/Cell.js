@@ -71,7 +71,7 @@ class Cellv2 extends React.Component {
         })
         .then(res => res.json())
         .then((data) => {
-            if(this.state.cell.value === 0){
+            if(this.state.cell.value === 0 || this.state.gameInfo.state !== 'ACTIVE' ){
                 this.handleChange(data);
             }else{
                 this.setState({ cell: data.cells[this.state.index], gameInfo: data, index: this.state.index});
@@ -95,6 +95,9 @@ class Cellv2 extends React.Component {
         })
         .then(res => res.json())
         .then((data) => {
+            if(this.state.cell.value === 0 || this.state.gameInfo.state !== 'ACTIVE' ){
+                this.handleChange(data);
+            }
             this.setState({ cell: data.cells[this.state.index], gameInfo: data, index: this.state.index});
         })
         .catch(console.log)

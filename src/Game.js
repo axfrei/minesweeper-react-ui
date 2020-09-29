@@ -24,10 +24,39 @@ class Game extends React.Component {
         this.setState({ gameInfo: newValue });
     }
 
+    pauseOrResumeGame(){
+        fetch(`http://prod.eba-wf3wzrap.us-east-1.elasticbeanstalk.com/game/pause/${this.state.gameId}`, {
+            method: 'PUT'
+        })
+        .then(res => res.json())
+        .then((data) => {
+            this.setState({gameId: this.state.gameId, gameInfo: data});
+        })
+        .catch(console.log)
+    }
+    
+
     render() {
 
         return (
             <div className="App">
+                {this.state.gameInfo && this.state.gameInfo.status === 'WIN' &&
+                    <div className="winner">YOU WIN</div>
+                }
+
+                {this.state.gameInfo && this.state.gameInfo.status === 'GAME_OVER' &&
+                    <div class="looser">YOU LOOSE</div>
+                }
+
+                {this.state.gameInfo && this.state.gameInfo.status === 'ACTIVE' &&
+                    <button onClick={()=>this.pauseOrResumeGame()}>Pause</button>
+                }
+
+                {this.state.gameInfo && this.state.gameInfo.status === 'PAUSED' &&
+                    <button onClick={()=>this.pauseOrResumeGame()}>Resume</button>
+                }
+
+
                 {this.state.gameInfo &&
                     <BoardV2 gameInfo={this.state.gameInfo} onChange={this.handleChange} ref={this.boardRef}/>
                 }
