@@ -18,6 +18,9 @@
     font-weight: bold;
 }
 
+.notActive {
+    cursor: unset;
+}
 
 ._1 {
     color: blue;

@@ -9,12 +9,19 @@ class UserHome extends React.Component {
     constructor(props) {
         super(props);
         const { state } = this.props.history.location;
-        this.state = { user: state.user, redirectToGame: false, newGameBombs: 0, newGameColumns: 0, newGameRows: 0}
+        this.state = { user: state.user, redirectToGame: false, newGameBombs: 0, newGameColumns: 0, newGameRows: 0 }
     }
 
     componentDidMount() {
         fetch(`http://prod.eba-wf3wzrap.us-east-1.elasticbeanstalk.com/game/${this.state.user}`)
-            .then(res => res.json())
+            .then((resp) => {
+                const data = resp.json();
+                if (!resp.ok) {
+                    const error = (data && data.message) || resp.status;
+                    return Promise.reject(error);
+                }
+                return data;
+            })
             .then((data) => {
                 this.setState({ userGames: data, user: this.state.user });
             })
@@ -34,51 +41,64 @@ class UserHome extends React.Component {
                 columns: this.state.newGameColumns,
                 rows: this.state.newGameRows,
                 userId: this.state.user
-              })
+            })
         })
-        .then(res => res.json())
-        .then((data) => {
-            console.log("redirect");
-            console.log(this);
-            console.log(data);
-            this.setState({user: data.user, redirectToGame: true, gameInfo: data, link: `/minesweeper/game/${data.id}`})
-        })
-        .catch(console.log)
+            .then((resp) => {
+                const data = resp.json();
+                if (!resp.ok) {
+                    const error = (data && data.message) || resp.status;
+                    return Promise.reject(error);
+                }
+                return data;
+            })
+            .then((data) => {
+                console.log("redirect");
+                console.log(this);
+                console.log(data);
+                this.setState({ user: data.user, redirectToGame: true, gameInfo: data, link: `/minesweeper/game/${data.id}` })
+            })
+            .catch(console.log)
     }
 
-    row(value){
-        this.setState({ user: this.state.user, redirectToGame: this.state.redirectToGame,
-             newGameBombs: this.state.newGameBombs, newGameColumns: this.state.newGameColumns,
-             newGameRows: value});
+    row(value) {
+        this.setState({
+            user: this.state.user, redirectToGame: this.state.redirectToGame,
+            newGameBombs: this.state.newGameBombs, newGameColumns: this.state.newGameColumns,
+            newGameRows: value
+        });
     }
 
-    col(value){
-        this.setState({ user: this.state.user, redirectToGame: this.state.redirectToGame,
-             newGameBombs: this.state.newGameBombs, newGameColumns: value,
-             newGameRows: this.state.newGameRows});
+    col(value) {
+        this.setState({
+            user: this.state.user, redirectToGame: this.state.redirectToGame,
+            newGameBombs: this.state.newGameBombs, newGameColumns: value,
+            newGameRows: this.state.newGameRows
+        });
     }
 
-    bomb(value){
-        this.setState({ user: this.state.user, redirectToGame: this.state.redirectToGame,
-             newGameBombs: value, newGameColumns: this.state.newGameColumns,
-             newGameRows: this.state.newGameRows});
+    bomb(value) {
+        this.setState({
+            user: this.state.user, redirectToGame: this.state.redirectToGame,
+            newGameBombs: value, newGameColumns: this.state.newGameColumns,
+            newGameRows: this.state.newGameRows
+        });
     }
 
     render() {
-        if(this.state.redirectToGame){
+        if (this.state.redirectToGame) {
             console.log("Should redirect");
             console.log(this.state)
-            return <Redirect to={{ pathname: this.state.link , state: { gameId: this.state.gameInfo.id } }}/>
+            return <Redirect to={{ pathname: this.state.link, state: { gameId: this.state.gameInfo.id } }} />
         }
 
         return (
             <div className="App">
                 <div>This is {this.state.user} Minesweeper Home Screen.
                 <div className="content">
-                            <label>Rows</label><input type="text" value={this.state.newGameRows}  onChange={event => this.row(event.target.value)}/>
-                            <label>Columns</label><input type="text" value={this.state.newGameColumns} onChange={event => this.col(event.target.value)}/>
-                            <label>Bombs</label><input type="text" value={this.state.newGameBombs} onChange={event => this.bomb(event.target.value)}/>
-                            <button className="button" onClick={() => this.createNewGame()}>Create</button>
+                        <label>Rows</label><input type="text" value={this.state.newGameRows} onChange={event => this.row(event.target.value)} />
+                        <label>Columns</label><input type="text" value={this.state.newGameColumns} onChange={event => this.col(event.target.value)} />
+                        <label>Bombs</label><input type="text" value={this.state.newGameBombs} onChange={event => this.bomb(event.target.value)} />
+                        <button className="button" onClick={() => this.createNewGame()}>Create</button>
                     </div>
                 </div>
                 <UserGamesPage state={this.state} />
@@ -112,9 +132,9 @@ function GameList(props) {
     props.userGames.forEach(element => {
         const link = `/minesweeper/game/${element.id}`;
         const initDate = new Date(element.creationTime);
-        const endDate = element.status === 'WIN' || element.status === 'GAME_OVER'?new Date(element.lastUpdate):new Date();
-        const diffSeconds = (endDate - initDate)/1000;
-        const timePlayed = Number((diffSeconds - element.timePaused)/60).toFixed(2);
+        const endDate = element.status === 'WIN' || element.status === 'GAME_OVER' || element.status === 'PAUSED'? new Date(element.lastUpdate) : new Date();
+        const diffSeconds = (endDate - initDate) / 1000;
+        const timePlayed = Number((diffSeconds - element.timePaused) / 60).toFixed(2);
 
         data.push({
             rows: element.metadata.rows,

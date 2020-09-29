@@ -13,7 +13,14 @@ class Game extends React.Component {
 
     componentDidMount(){
         fetch(`http://prod.eba-wf3wzrap.us-east-1.elasticbeanstalk.com/game/load/${this.state.gameId}`)
-        .then(res => res.json())
+        .then((resp) => {
+            const data =  resp.json();
+            if(!resp.ok){
+                const error = (data && data.message) || resp.status;
+                return Promise.reject(error);
+            }
+            return data;
+        })
         .then((data) => {
           this.setState({gameId: this.state.gameId, gameInfo: data});
         })
@@ -28,7 +35,14 @@ class Game extends React.Component {
         fetch(`http://prod.eba-wf3wzrap.us-east-1.elasticbeanstalk.com/game/pause/${this.state.gameId}`, {
             method: 'PUT'
         })
-        .then(res => res.json())
+        .then((resp) => {
+            const data =  resp.json();
+            if(!resp.ok){
+                const error = (data && data.message) || resp.status;
+                return Promise.reject(error);
+            }
+            return data;
+        })
         .then((data) => {
             this.setState({gameId: this.state.gameId, gameInfo: data});
         })

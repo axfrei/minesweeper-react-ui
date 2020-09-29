@@ -26,17 +26,17 @@ class Cellv2 extends React.Component {
         const gameInfo = this.state.gameInfo;
         if (cell.recognized) {
             if(cell.bomb){
-                return <div className="rTableCell"><PrettyCell symbol="💣" className="recognized"/></div>
+                return <div className="rTableCell"><PrettyCell symbol="💣" className="recognized notActive"/></div>
             }
 
-            return <div className="rTableCell"><PrettyCell label={cell.value} className="recognized"/></div>
+            return <div className="rTableCell"><PrettyCell label={cell.value} className="recognized notActive"/></div>
         }
 
         if (cell.flagged) {
-           return  <div className="rTableCell"><PrettyCell symbol="🏁" className="flagged" onClick={()=> this.handleClicks(cell, gameInfo)}/></div>
+           return  <div className="rTableCell"><PrettyCell symbol="🏁" className={`flagged ${gameInfo.status !== 'ACTIVE'? 'notActive':''}`} onClick={()=> this.handleClicks(cell, gameInfo)}/></div>
         }
 
-        return <div className="rTableCell"><PrettyCell label="&nbsp;" onClick={()=> this.handleClicks(cell, gameInfo)}/></div>
+        return <div className="rTableCell"><PrettyCell label="&nbsp;" className={gameInfo.status !== 'ACTIVE'? 'notActive':''} onClick={()=> this.handleClicks(cell, gameInfo)}/></div>
     }
 
     handleClicks(cell, gameInfo) {
@@ -56,8 +56,8 @@ class Cellv2 extends React.Component {
         }
       }
 
-    recognize(cell, gameInfo) {
-        fetch(`http://prod.eba-wf3wzrap.us-east-1.elasticbeanstalk.com/game/recognize`, {
+    doMove(cell, gameInfo, move) {
+        fetch(`http://prod.eba-wf3wzrap.us-east-1.elasticbeanstalk.com/game/${move}`, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -69,38 +69,35 @@ class Cellv2 extends React.Component {
                 y: cell.y
             })
         })
-        .then(res => res.json())
-        .then((data) => {
+        .then((resp) => {
+            const data =  resp.json();
+            if(!resp.ok){
+                const error = (data && data.message) || resp.status;
+                return Promise.reject(error);
+            }
+            return data;
+        })
+        .then((data)=>{
             if(this.state.cell.value === 0 || this.state.gameInfo.state !== 'ACTIVE' ){
                 this.handleChange(data);
-            }else{
+            }
+            
+            if(move==='flag' || !(this.state.cell.value === 0 || this.state.gameInfo.state !== 'ACTIVE' )){
                 this.setState({ cell: data.cells[this.state.index], gameInfo: data, index: this.state.index});
             }
         })
-        .catch(console.log)
+        .catch(error => {
+            this.setState({ errorMessage: error.toString() });
+            console.error(error);
+        });
+    }
+
+    recognize(cell, gameInfo) {
+        this.doMove(cell, gameInfo, 'recognize');
     }
     
     flag(cell, gameInfo) {
-        fetch(`http://prod.eba-wf3wzrap.us-east-1.elasticbeanstalk.com/game/flag`, {
-            method: 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                gameId: gameInfo.id,
-                x: cell.x,
-                y: cell.y
-            })
-        })
-        .then(res => res.json())
-        .then((data) => {
-            if(this.state.cell.value === 0 || this.state.gameInfo.state !== 'ACTIVE' ){
-                this.handleChange(data);
-            }
-            this.setState({ cell: data.cells[this.state.index], gameInfo: data, index: this.state.index});
-        })
-        .catch(console.log)
+        this.doMove(cell, gameInfo, 'flag');
     }
 }
 
