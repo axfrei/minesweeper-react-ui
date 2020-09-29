@@ -23,13 +23,14 @@ class BeginForm extends React.Component {
   render() {
       return(
         <div className="App">
-        <h1>Welcome to Axel Minesweeper game</h1>
+        <h1>Welcome to Axel Minesweeper Rustic Game</h1>
         <div className="beginForm">
         <form onSubmit={this.handleSubmit}>
           <label>
-            Enter user name:
+            Enter user name: <br/>
             <input type="text" value={this.state.value} onChange={this.handleChange} />
           </label>
+          <br/>
           <input type="submit" value="Submit" />
         </form>
       </div>

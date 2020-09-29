@@ -92,9 +92,9 @@ class UserHome extends React.Component {
         }
 
         return (
-            <div className="App">
-                <div>This is {this.state.user} Minesweeper Home Screen.
-                <div className="content">
+            <div className="App beginForm">
+                <div className="title">This is {this.state.user} Minesweeper Home Screen.
+                    <div className="createForm">
                         <label>Rows</label><input type="text" value={this.state.newGameRows} onChange={event => this.row(event.target.value)} />
                         <label>Columns</label><input type="text" value={this.state.newGameColumns} onChange={event => this.col(event.target.value)} />
                         <label>Bombs</label><input type="text" value={this.state.newGameBombs} onChange={event => this.bomb(event.target.value)} />

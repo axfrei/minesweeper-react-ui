@@ -9,6 +9,18 @@
   color: white;
 }
 
+.beginForm {
+  text-align: center;
+}
+
 .App-link {
   color: #61dafb;
+}
+
+.title {
+  padding: 1em 1em 1em 1em;
+}
+
+.createForm{
+  padding: 1em;
 }

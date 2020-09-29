@@ -10,7 +10,10 @@ import Game from './Game'
 ReactDOM.render(
   <React.StrictMode>
     <div>
-      
+    <p>DISCLAIMER: This is my first time making an application with React, therefore I am aware that there is much to improve and refactor. Don't spect a fancy UI,
+      this was only taked as a personal challenge to learn (at least a little) a new technology and also to test my Minesweeper API.
+      I hope you could still appreciate it despite being a bit rustic
+    </p>
     </div>
     <BrowserRouter>
           <Route exact={true} path="/" component={BeginForm}/>
