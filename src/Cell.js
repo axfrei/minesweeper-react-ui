@@ -36,7 +36,7 @@ class Cellv2 extends React.Component {
            return  <div className="rTableCell"><PrettyCell symbol="🏁" className={`flagged ${gameInfo.status !== 'ACTIVE'? 'notActive':''}`} onClick={()=> this.handleClicks(cell, gameInfo)}/></div>
         }
 
-        return <div className="rTableCell"><PrettyCell className={gameInfo.status !== 'ACTIVE'? 'notActive':''} onClick={()=> this.handleClicks(cell, gameInfo)}/></div>
+        return <div className="rTableCell"><PrettyCell label="&nbsp;" className={gameInfo.status !== 'ACTIVE'? 'notActive':''} onClick={()=> this.handleClicks(cell, gameInfo)}/></div>
     }
 
     handleClicks(cell, gameInfo) {
