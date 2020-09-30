@@ -24,3 +24,11 @@
 .createForm{
   padding: 1em;
 }
+
+.game {
+  text-align: center;
+}
+
+.instructions {
+    font-size: small;
+}

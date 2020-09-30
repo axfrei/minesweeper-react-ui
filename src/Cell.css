@@ -1,13 +1,13 @@
-.rTable { display: table; width: 50%;}
+.rTable { display: table; width: 50%; margin: auto;}
 .rTableRow { display: table-row; }
 .rTableHeading { display: table-header-group; }
 .rTableBody { display: table-row-group; }
 .rTableFoot { display: table-footer-group; }
 .rTableCell, .rTableHead { display: table-cell; display: table-cell;
-    max-width: 2px;
     border: 1px solid;
     text-align: center;
-    background: lightgray; }
+    background: lightgray;
+    min-width: 34px;}
 
 .toDiscover { background-color: grey;}
 
@@ -16,6 +16,8 @@
     cursor: pointer;
     text-shadow:gray;
     font-weight: bold;
+    max-width: 34px;
+    max-height: 34px;
 }
 
 .notActive {

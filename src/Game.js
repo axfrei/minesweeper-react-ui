@@ -54,6 +54,7 @@ class Game extends React.Component {
 
         return (
             <div className="App">
+                <div className="game">
                 {this.state.gameInfo && this.state.gameInfo.status === 'WIN' &&
                     <div className="winner">YOU WIN</div>
                 }
@@ -74,6 +75,13 @@ class Game extends React.Component {
                 {this.state.gameInfo &&
                     <BoardV2 gameInfo={this.state.gameInfo} onChange={this.handleChange} ref={this.boardRef}/>
                 }
+                </div>
+                <div className="instructions">
+                    <ul>
+                        <li>Click: Recognize Cell</li>
+                        <li>Double Click: Flag Cell</li>
+                    </ul>
+                </div>
             </div>
         )
     }
